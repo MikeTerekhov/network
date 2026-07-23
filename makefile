@@ -12,7 +12,7 @@ all: $(TARGET)
 
 # link object files into finaL executable
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS) $(OBJS)
 
 # compile each .cpp into a .o
 %.o: %.cpp
