@@ -23,10 +23,24 @@ int main()
       return 1;
    }
 
-   const char* message = "Hello, server!";
-   if (send(clientSocket, message, strlen(message), 0) < 0) {
-      perror("send");
-      return 1;
+   string message;
+
+   while (true) {
+      cout << "Send message to server: ";
+      getline(cin, message);
+      const char* cstr = message.c_str();
+      if (!strcmp(cstr, "quit")) {
+         cout << "we are quitting" << endl;
+         break;
+      }
+      else {
+         cout << "sent message: " << message << "to server" << endl;
+         if (send(clientSocket, message, strlen(message), 0) < 0) {
+            perror("send");
+            return 1;
+         }
+      }
+
    }
 
    close(clientSocket);
