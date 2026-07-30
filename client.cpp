@@ -34,8 +34,10 @@ int main()
          break;
       }
       else {
-         cout << "sent message: " << message << "to server" << endl;
-         if (send(clientSocket, message, strlen(message), 0) < 0) {
+         cout << "-----------------------------" << endl;
+         cout << "| sent message to server: " << message  << "|"<< endl;
+         cout << "-----------------------------" << endl;
+         if (send(clientSocket, cstr, strlen(cstr), 0) < 0) {
             perror("send");
             return 1;
          }

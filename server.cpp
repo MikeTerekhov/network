@@ -32,14 +32,17 @@ int main()
 
     int clientSocket = accept(serverSocket, nullptr, nullptr);
 
-    char buffer[1024] = {0};
-    ssize_t n = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-    if (n > 0) {
-        cout << "Message from client: " << buffer << endl;
-    } else if (n == 0) {
-        cout << "0 bytes sent" << endl;
-    } else {
-        perror("recv");
+    while (true)
+    {
+        char buffer[1024] = {0};
+        ssize_t n = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+        if (n > 0) {
+            cout << "Message from client: " << buffer << endl;
+        } else if (n == 0) {
+            cout << "0 bytes sent" << endl;
+        } else {
+            perror("recv");
+        }
     }
     
 
