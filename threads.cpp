@@ -1,17 +1,21 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <mutex>
 
 using namespace std;
 
+mutex cout_mutex; 
+
 void thread_func(int num)
 {
-   this_thread::sleep_for(std::chrono::seconds(1));
+   lock_guard<mutex> lock(cout_mutex);
    cout << "hello from a  thread, number passed is: " << num << endl;
 }
 
 void thread_func_2(int num)
 {
+   lock_guard<mutex> lock(cout_mutex);
    cout << "hello from a  thread, number passed is: " << num << endl;
 }
 
