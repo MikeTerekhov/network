@@ -3,8 +3,34 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <thread> 
 
 using namespace std;
+
+void handle_client(int client_socket)
+{
+    char buffer[1024];
+    std::cout << "[Server] Thread spawned for socket FD: " << client_socket << "\n";
+
+    while (true) 
+    {
+        memset(buffer, 0, sizeof(buffer));
+        int bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
+
+        if (bytes_received <= 0) {
+            std::cout << "[Server] Client disconnected (FD: " << client_socket << ")\n";
+            break;
+        }
+
+        std::cout << "[Client " << client_socket << "]: " << buffer << "\n";
+
+        // Echo data back to the client
+        send(client_socket, buffer, bytes_received, 0);
+    }
+
+
+    close(client_socket);
+}
 
 int main() 
 {
@@ -30,21 +56,12 @@ int main()
         return 1;
     }
 
-    int clientSocket = accept(serverSocket, nullptr, nullptr);
-
     while (true)
     {
-        char buffer[1024] = {0};
-        ssize_t n = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-        if (n > 0) {
-            cout << "Message from client : " << buffer << endl;
-        } else if (n == 0) {
-            cout << "0 bytes sent" << endl;
-        } else {
-            perror("recv");
-        }
+        int clientSocket = accept(serverSocket, nullptr, nullptr);
+        std::thread client_thread(handle_client, clientSocket);
+        client_thread.detach();
     }
-    
 
     close(serverSocket);
 
